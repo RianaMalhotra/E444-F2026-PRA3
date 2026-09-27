@@ -1,0 +1,6 @@
+Flask
+Flask-Bootstrap
+Flask-Moment
+Flask-WTF
+WTForms
+email-validator
