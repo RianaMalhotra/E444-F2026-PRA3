@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}PRA3 Chatbot{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>PRA3 Chatbot</h1>
+
+    <p>
+        Welcome, {{ session.get('name') }}!
+        Your UofT email is {{ session.get('email') }}.
+    </p>
+</div>
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <strong>Conversation</strong>
+    </div>
+
+    <div class="panel-body">
+
+        {% if chat_history %}
+
+            {% for item in chat_history %}
+
+                {% if item.sender == 'User' %}
+                    <p>
+                        <strong>You:</strong>
+                        {{ item.message }}
+                    </p>
+
+                {% else %}
+                    <p>
+                        <strong>Bot:</strong>
+                        {{ item.message }}
+                    </p>
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>
+                No messages yet. Try saying
+                <strong>My name is Alice.</strong>
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<form method="POST" action="{{ url_for('chat') }}">
+
+    <div class="form-group">
+
+        <label for="message">
+            Message
+        </label>
+
+        <input
+            type="text"
+            class="form-control"
+            id="message"
+            name="message"
+            placeholder="Type a message..."
+            required
+        >
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+        Send
+    </button>
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="btn btn-danger">
+        Logout
+    </a>
+
+</form>
+
+{% endblock %}
