@@ -2,9 +2,11 @@
 
 {% block title %}ECE444 PRA3{% endblock %}
 
+
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
+
         <div class="navbar-header">
             <a class="navbar-brand" href="/">Flasky</a>
         </div>
@@ -14,15 +16,36 @@
                 <li><a href="/">Home</a></li>
             </ul>
         </div>
+
     </div>
 </div>
 {% endblock %}
 
+
 {% block content %}
 <div class="container">
-    {% block page_content %}{% endblock %}
+
+    <!-- Display Flask flash messages -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button"
+                class="close"
+                data-dismiss="alert">
+            &times;
+        </button>
+
+        {{ message }}
+    </div>
+    {% endfor %}
+
+
+    <!-- Content supplied by individual pages -->
+    {% block page_content %}
+    {% endblock %}
+
 </div>
 {% endblock %}
+
 
 {% block scripts %}
 {{ super() }}

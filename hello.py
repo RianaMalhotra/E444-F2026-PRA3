@@ -1,10 +1,11 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 from datetime import datetime
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -34,14 +35,31 @@ def index():
 
     if form.validate_on_submit():
 
-        # Check whether this is a UofT email
+        # Warn whenever the submitted name is different
+        # from the previously submitted name
+        if session.get('name') is not None:
+            if session.get('name') != form.name.data:
+                flash('Looks like you have changed your name!')
+
+        # Warn whenever the submitted email is different
+        # from the previously submitted email
+        if session.get('submitted_email') is not None:
+            if session.get('submitted_email') != form.email.data:
+                flash('Looks like you have changed your email!')
+
+        # Remember what was submitted
+        session['name'] = form.name.data
+        session['submitted_email'] = form.email.data
+
+        # Check for UofT email
         if 'utoronto' in form.email.data.lower():
-            session['name'] = form.name.data
             session['email'] = form.email.data
 
             return redirect(url_for('index'))
 
         else:
+            # Keep previous warning format
+            session['email'] = None
             message = 'Please fill in a UofT email address.'
 
     return render_template(
